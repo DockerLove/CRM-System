@@ -9,11 +9,29 @@ import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
+@SpringBootApplication(scanBasePackages = "com.example")
 public class MainApp extends Application {
+
+    private static ConfigurableApplicationContext springContext;
+    private static DatabaseConnection databaseConnection;
+
+    @Override
+    public void init() {
+        // Запускаем Spring контекст
+        springContext = SpringApplication.run(MainApp.class);
+
+        // Получаем бин DatabaseConnection из Spring
+        databaseConnection = springContext.getBean(DatabaseConnection.class);
+    }
 
     @Override
     public void start(Stage stage) {
+        // Тестируем подключение (теперь через Spring бин)
         DatabaseConnection.testConnection();
 
         TabPane tabPane = new TabPane();
@@ -47,6 +65,14 @@ public class MainApp extends Application {
         stage.setTitle("CRM Система - Учет клиентов");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void stop() {
+        // Корректно закрываем Spring контекст
+        if (springContext != null) {
+            springContext.close();
+        }
     }
 
     public static void main(String[] args) {

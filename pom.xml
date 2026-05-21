@@ -64,6 +64,12 @@
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.1.5</version> <!-- Укажите вашу версию -->
+        </dependency>
     </dependencies>
 
     <build>
